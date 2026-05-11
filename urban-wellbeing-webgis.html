@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BKK Smart City | Urban Well-being Dashboard</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-left">
+                <i class="fa-solid fa-microchip logo-icon"></i>
+                <div>
+                    <h1>BKK SMART CITY</h1>
+                    <span class="tagline">Urban Well-being & Spatial Analysis Platform</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="status-indicator">
+                    <span class="pulse"></span> Live Spatial Data
+                </div>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Left Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-scroll">
+                    <!-- Project Info Section -->
+                    <section class="sidebar-section info-section">
+                        <h2><i class="fa-solid fa-circle-info"></i> Project Description</h2>
+                        <div class="info-card">
+                            <h3>Urban Well-being Concept</h3>
+                            <p>Urban well-being integrates physical, social, and environmental factors. Our analysis
+                                focuses on how accessibility to transit and land use diversity impacts the quality of
+                                life in Bangkok.</p>
+                        </div>
+
+                        <div class="accordion">
+                            <details open>
+                                <summary>Transportation Analysis</summary>
+                                <p>Evaluates the reach of BTS and MRT networks. Connectivity nodes are analyzed to
+                                    identify regions with optimal transit access.</p>
+                            </details>
+                            <details>
+                                <summary>Land Use Analysis</summary>
+                                <p>Classification of urban zones (Residential, Commercial, Industrial) to understand the
+                                    distribution of services and jobs.</p>
+                            </details>
+                            <details>
+                                <summary>Buffer Analysis</summary>
+                                <p>Spatial proximity analysis (500m/1km buffers) to transit hubs to determine "walkable"
+                                    urban zones.</p>
+                            </details>
+                            <details>
+                                <summary>Spatial Workflow</summary>
+                                <p>Data Collection → Geometry Processing → Attribute Mapping → Accessibility Scoring →
+                                    Visualization.</p>
+                            </details>
+                        </div>
+                    </section>
+
+                    <!-- Layer Control -->
+                    <section class="sidebar-section">
+                        <h2><i class="fa-solid fa-layer-group"></i> Layer Control</h2>
+                        <div class="layer-list">
+                            <label class="layer-item">
+                                <input type="checkbox" id="layer-stations" checked>
+                                <span class="custom-check transport"></span>
+                                MRT/BTS Stations
+                            </label>
+                            <label class="layer-item">
+                                <input type="checkbox" id="layer-roads">
+                                <span class="custom-check roads"></span>
+                                Road Network
+                            </label>
+                            <label class="layer-item">
+                                <input type="checkbox" id="layer-landuse">
+                                <span class="custom-check landuse"></span>
+                                Land Use Polygons
+                            </label>
+                            <label class="layer-item">
+                                <input type="checkbox" id="layer-buffer">
+                                <span class="custom-check buffer"></span>
+                                Buffer Zones (800m)
+                            </label>
+                        </div>
+                    </section>
+
+                    <!-- Filters -->
+                    <section class="sidebar-section">
+                        <h2><i class="fa-solid fa-sliders"></i> Filters</h2>
+                        <div class="filter-group">
+                            <label>District Select</label>
+                            <select id="district-filter" class="styled-select">
+                                <option value="all">All Districts</option>
+                                <option value="Pathum Wan">Pathum Wan</option>
+                                <option value="Bang Rak">Bang Rak</option>
+                                <option value="Sukhumvit">Sukhumvit</option>
+                            </select>
+                        </div>
+                    </section>
+
+                    <!-- Legend -->
+                    <section class="sidebar-section">
+                        <h2><i class="fa-solid fa-list-ul"></i> Legend</h2>
+                        <div class="legend-grid">
+                            <div class="leg-item"><span class="box transportation"></span> Transportation</div>
+                            <div class="leg-item"><span class="box roads"></span> Roads</div>
+                            <div class="leg-item"><span class="box residential"></span> Residential</div>
+                            <div class="leg-item"><span class="box commercial"></span> Commercial</div>
+                            <div class="leg-item"><span class="box industrial"></span> Industrial</div>
+                            <div class="leg-item"><span class="box buffer"></span> Buffer Area</div>
+                        </div>
+                    </section>
+                </div>
+            </aside>
+
+            <!-- Map View -->
+            <main class="map-view">
+                <div id="map"></div>
+
+                <!-- Floating Controls -->
+                <div class="map-overlay-tools">
+                    <button id="locate-btn" class="tool-btn" title="Zoom to My Location">
+                        <i class="fa-solid fa-crosshairs"></i>
+                    </button>
+                    <button id="reset-btn" class="tool-btn" title="Reset View">
+                        <i class="fa-solid fa-house"></i>
+                    </button>
+                </div>
+
+                <!-- Live Dashboard Stats -->
+                <div class="map-stats-overlay">
+                    <div class="stat-bubble">
+                        <span class="val">115</span>
+                        <span class="lab">Transit Nodes</span>
+                    </div>
+                    <div class="stat-bubble">
+                        <span class="val">42.5%</span>
+                        <span class="lab">Walkability</span>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="footer-content">
+                <p>&copy; 2026 Bangkok Smart City Initiative | Urban Well-being Study</p>
+                <div class="footer-tags">
+                    <span class="badge">OpenData BKK</span>
+                    <span class="badge">Spatial Analytics</span>
+                    <span class="badge">V1.5</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- External Libraries -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Shapefile Support -->
+    <script src="https://unpkg.com/shpjs@latest/dist/shp.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
